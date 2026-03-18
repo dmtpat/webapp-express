@@ -63,7 +63,20 @@ function store(req, res) {
 //-----------------------------modify--U-----------------------------------------
 
 //-----------------------------destroy-D-----------------------------------------
+function destroy(req, res) {
+    const id = Number(req.params.id);
+    const sqlQuery = `DELETE FROM movies WHERE id= ?;`;
+
+    dbConnection.query(sqlQuery, [id], (error, rows) => {
+        if (error) {
+            return res.status(500).json({ error: "DB Error", message: error.message });
+        }
+        if (rows.affectedRows == 0) {
+            return res.status(404).json({ error: "Not Found", message: `Movie width id ${id} NOT FOUND` });
+        }
+        return res.sendStatus(204);
+    })
+}
 
 
-
-module.exports = { index, show, store };
+module.exports = { index, show, store, destroy };

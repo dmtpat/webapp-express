@@ -14,6 +14,7 @@ router.get('/:id', moviesController.show);
 //store Create
 router.post('/', moviesController.store);
 
-
+//destroy Destroy
+router.delete('/:id', moviesController.destroy);
 
 module.exports = router;
