@@ -2,6 +2,8 @@ console.log("Benvenuto!")
 const express = require("express");
 const app = express();
 
+const moviesRouter = require('./routers/movies.js');
+
 const not_found = require("./middlewares/not_found.js");
 const errors_handler = require("./middlewares/errors_handler.js");
 
@@ -15,6 +17,8 @@ app.get('/', (req, res) => {
     console.log("Cliamata di base del server");
     res.send("Server della webApp!");
 })
+
+app.use("/movies", moviesRouter);
 
 app.use(not_found);
 app.use(errors_handler);
