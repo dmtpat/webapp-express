@@ -18,7 +18,7 @@ app.get('/', (req, res) => {
     res.send("Server della webApp!");
 })
 
-app.use("/movies", moviesRouter);
+app.use("/api/movies", moviesRouter);
 
 app.use(not_found);
 app.use(errors_handler);
