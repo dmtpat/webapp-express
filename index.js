@@ -7,8 +7,6 @@ const moviesRouter = require('./routers/movies.js');
 const not_found = require("./middlewares/not_found.js");
 const errors_handler = require("./middlewares/errors_handler.js");
 
-const port = 3000;
-
 app.use(express.static("public"));
 app.use(express.json());
 
@@ -23,6 +21,6 @@ app.use("/api/movies", moviesRouter);
 app.use(not_found);
 app.use(errors_handler);
 
-app.listen(port, () => {
+app.listen(process.env.APP_PORT, () => {
     console.log("La chiamata è stata accettata");
 })
