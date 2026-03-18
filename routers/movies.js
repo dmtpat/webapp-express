@@ -8,4 +8,7 @@ const moviesController = require("../controllers/moviesController");
 //index Read
 router.get('/', moviesController.index);
 
+//show  Read
+router.get('/:id', moviesController.show);
+
 module.exports = router;
