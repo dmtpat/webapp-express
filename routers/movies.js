@@ -11,4 +11,9 @@ router.get('/', moviesController.index);
 //show  Read
 router.get('/:id', moviesController.show);
 
+//store Create
+router.post('/', moviesController.store);
+
+
+
 module.exports = router;

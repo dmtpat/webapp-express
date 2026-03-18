@@ -7,7 +7,7 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "dev": "node --env-files_.env --watch index.js"
+    "dev": "node --env-file=.env --watch index.js"
   },
   "dependencies": {
     "express": "^5.2.1",

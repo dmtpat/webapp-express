@@ -1,6 +1,7 @@
 const dbConnection = require("../data/dbConnection");
 
-
+//------------------------------CRUD---------------------------------------------
+//-----------------------------index--R------------------------------------------
 function index(req, res) {
     console.log(req.query);
 
@@ -18,7 +19,7 @@ function index(req, res) {
         res.json(rows);
     });
 }
-
+//-----------------------------show---R------------------------------------------
 function show(req, res) {
     const id = Number(req.params.id);
     console.log("Il film da mostrare è ", id);
@@ -38,5 +39,31 @@ function show(req, res) {
         res.json(rows);
     });
 }
+//-----------------------------store---C-----------------------------------------
+function store(req, res) {
+    const arrayParams = [req.body.title, req.body.director, req.body.genre, req.body.release_year, req.body.abstract, req.body.image, new Date(), new Date()];
+    const sqlQuery = `INSERT INTO movies(title, director, genre, release_year, abstract, image, created_at, updated_at)
+            VALUES(?,?,?,?,?,?, ?, ?);`;
+    dbConnection.query(sqlQuery, arrayParams, (error, rows) => {
+        if (error) {
+            return res.status(500).json({ error: "DB Error", message: error.message });
+        }
+        console.log(rows.insertId);
+        dbConnection.query("SELECT * FROM movies WHERE id = ?", [rows.insertId], (error, row) => {
+            if (error) {
+                return res.status(500).json({ error: "DB error", message: error.message });
+            }
+            const results = row[0];
+            return res.status(201).json(results);
+        })
+    })
+}
+//-----------------------------update--U-----------------------------------------
 
-module.exports = { index, show };
+//-----------------------------modify--U-----------------------------------------
+
+//-----------------------------destroy-D-----------------------------------------
+
+
+
+module.exports = { index, show, store };
