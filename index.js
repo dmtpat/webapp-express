@@ -1,5 +1,6 @@
 console.log("Benvenuto!")
 const express = require("express");
+const cors = require("cors");
 const app = express();
 
 const moviesRouter = require('./routers/movies.js');
@@ -7,6 +8,9 @@ const reviewsRouter = require('./routers/reviews.js')
 
 const not_found = require("./middlewares/not_found.js");
 const errors_handler = require("./middlewares/errors_handler.js");
+
+const corsConfig = { origin: process.env.FE_URL };
+app.use(cors(corsConfig));
 
 app.use(express.static("public"));
 app.use(express.json());
