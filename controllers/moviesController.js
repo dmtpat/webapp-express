@@ -36,7 +36,23 @@ function show(req, res) {
         if (!rows) {
             return res.status(404).json({ error: "Not Found", message: "Post non trovato" })
         }
-        res.json(rows);
+        const movie = rows[0];
+        console.log("movie before review", movie)
+        const sqlQuery = `SELECT id, movie_id, name, vote, text, created_at
+        FROM reviews
+        WHERE movie_id=?
+        `;
+        dbConnection.query(sqlQuery, [id], (error, rows) => {
+            if (error) {
+                return res.status(500).json({ error: "DB error", message: "erore recupero dati tags dal DB" });
+            }
+            if (!rows) {
+                return res.status(404).json({ error: "Not Found", message: "Post non trovato" })
+            }
+            movie.reviews = rows;
+            res.json(movie);
+        })
+
     });
 }
 //-----------------------------store---C-----------------------------------------
