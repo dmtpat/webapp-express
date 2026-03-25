@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 
 const moviesRouter = require('./routers/movies.js');
+const reviewsRouter = require('./routers/reviews.js')
 
 const not_found = require("./middlewares/not_found.js");
 const errors_handler = require("./middlewares/errors_handler.js");
@@ -17,6 +18,7 @@ app.get('/', (req, res) => {
 })
 
 app.use("/api/movies", moviesRouter);
+app.use("/api/reviews", reviewsRouter);
 
 app.use(not_found);
 app.use(errors_handler);

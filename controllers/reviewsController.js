@@ -5,8 +5,8 @@ const dbConnection = require("../data/dbConnection");
 function index(req, res) {
     console.log(req.query);
 
-    let sqlQuery = `SELECT id, title, director, genre, release_year, abstract, image 
-        FROM movies_db.movies;
+    let sqlQuery = `SELECT id, movie_id, name, vote, text, created_at 
+        FROM movies_db.reviews;
     `;
     dbConnection.query(sqlQuery, (error, rows) => {
         console.log("connesso index");
@@ -22,10 +22,10 @@ function index(req, res) {
 //-----------------------------show---R------------------------------------------
 function show(req, res) {
     const id = Number(req.params.id);
-    console.log("Il film da mostrare è ", id);
+    console.log("la review da mostrare è ", id);
 
-    const sqlQuery = `SELECT title, director, genre, release_year, abstract, image 
-    FROM movies_db.movies
+    const sqlQuery = `SELECT id, movie_id, name, vote, text, created_at  
+    FROM movies_db.reviews
     WHERE id=?
     `;
     dbConnection.query(sqlQuery, [id], (error, rows) => {
@@ -42,14 +42,14 @@ function show(req, res) {
 //-----------------------------store---C-----------------------------------------
 function store(req, res) {
     const arrayParams = [req.body.title, req.body.director, req.body.genre, req.body.release_year, req.body.abstract, req.body.image, new Date(), new Date()];
-    const sqlQuery = `INSERT INTO movies(title, director, genre, release_year, abstract, image, created_at, updated_at)
+    const sqlQuery = `INSERT INTO reviews(title, director, genre, release_year, abstract, image, created_at, updated_at)
             VALUES(?,?,?,?,?,?, ?, ?);`;
     dbConnection.query(sqlQuery, arrayParams, (error, rows) => {
         if (error) {
             return res.status(500).json({ error: "DB Error", message: error.message });
         }
         console.log(rows.insertId);
-        dbConnection.query("SELECT * FROM movies WHERE id = ?", [rows.insertId], (error, row) => {
+        dbConnection.query("SELECT * FROM reviews WHERE id = ?", [rows.insertId], (error, row) => {
             if (error) {
                 return res.status(500).json({ error: "DB error", message: error.message });
             }
@@ -65,7 +65,7 @@ function store(req, res) {
 //-----------------------------destroy-D-----------------------------------------
 function destroy(req, res) {
     const id = Number(req.params.id);
-    const sqlQuery = `DELETE FROM movies WHERE id= ?;`;
+    const sqlQuery = `DELETE FROM reviews WHERE id= ?;`;
 
     dbConnection.query(sqlQuery, [id], (error, rows) => {
         if (error) {
