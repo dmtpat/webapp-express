@@ -37,7 +37,6 @@ function show(req, res) {
             return res.status(404).json({ error: "Not Found", message: "Post non trovato" })
         }
         const movie = rows[0];
-        movie.image = `/${movie.image}`;
         console.log("movie before review", movie)
         const sqlQuery = `SELECT id, movie_id, name, vote, text, created_at
         FROM reviews
