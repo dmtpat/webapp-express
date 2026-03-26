@@ -37,6 +37,7 @@ function show(req, res) {
             return res.status(404).json({ error: "Not Found", message: "Post non trovato" })
         }
         const movie = rows[0];
+        movie.image = `/${movie.image}`;
         console.log("movie before review", movie)
         const sqlQuery = `SELECT id, movie_id, name, vote, text, created_at
         FROM reviews
@@ -50,7 +51,23 @@ function show(req, res) {
                 return res.status(404).json({ error: "Not Found", message: "Post non trovato" })
             }
             movie.reviews = rows;
-            res.json(movie);
+            console.log("movie before media", movie);
+            const sqlQuery = `SELECT AVG(vote) AS avg
+            FROM movies
+            JOIN reviews
+            ON movies.id= reviews.movie_id
+            WHERE movies.id = ?
+            GROUP BY movie_id
+            `;
+            dbConnection.query(sqlQuery, [id], (error, rows) => {
+                if (error) {
+                    return res.status(500).json({ error: "DB Error", message: "errore nel recupero dati media dal DB" });
+                }
+
+                movie.avg = rows[0].avg;
+                console.log("media", rows[0].avg);
+                res.json(movie);
+            })
         })
 
     });
