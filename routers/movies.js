@@ -13,7 +13,8 @@ router.get('/:id', moviesController.show);
 
 //store Create
 router.post('/', moviesController.store);
-
+//store review
+router.get('/:id/reviews', moviesController.storeReview);
 //destroy Destroy
 router.delete('/:id', moviesController.destroy);
 

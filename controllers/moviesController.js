@@ -51,9 +51,9 @@ function show(req, res) {
             }
             movie.reviews = rows;
             console.log("movie before media", movie);
-            const sqlQuery = `SELECT AVG(vote) AS avg
+            const sqlQuery = `SELECT ROUND(AVG(vote)) AS avg
             FROM movies
-            JOIN reviews
+            LEFT JOIN reviews
             ON movies.id= reviews.movie_id
             WHERE movies.id = ?
             GROUP BY movie_id
@@ -63,7 +63,7 @@ function show(req, res) {
                     return res.status(500).json({ error: "DB Error", message: "errore nel recupero dati media dal DB" });
                 }
 
-                movie.avg = rows[0].avg;
+                movie.avg = Number(rows[0].avg);
                 console.log("media", rows[0].avg);
                 res.json(movie);
             })
@@ -90,6 +90,23 @@ function store(req, res) {
         })
     })
 }
+//-----------------------------store---C-----------------------------------------
+function storeReview(req, res) {
+    const id = Number(req.params.id);
+    console.log("Il film a cui mettere la recensione ha id ", id);
+    const { text, vote, name } = req.body;
+    const sqlQuery = `INSERT INTO reviews(text, vote, name, movie_id)
+    VALUES(?, ?, ?, ?)
+    `;
+    dbConnection.query(sqlQuery, [text, vote, name, id], (error, rows) => {
+        if (error) {
+            return res.status(500).json({ error: "DB Error", message: error.message });
+        }
+        console.log(rows.insertId);
+        res.sendStatus(201);
+    }
+    )
+}
 //-----------------------------update--U-----------------------------------------
 
 //-----------------------------modify--U-----------------------------------------
@@ -111,4 +128,4 @@ function destroy(req, res) {
 }
 
 
-module.exports = { index, show, store, destroy };
+module.exports = { index, show, store, destroy, storeReview };
